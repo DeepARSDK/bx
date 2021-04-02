@@ -6,7 +6,7 @@
 #include "bx_p.h"
 #include <bx/timer.h>
 
-#if BX_PLATFORM_ANDROID
+#if BX_PLATFORM_ANDROID || BX_PLATFORM_IOS
 #	include <time.h> // clock, clock_gettime
 #elif BX_PLATFORM_EMSCRIPTEN
 #	include <emscripten.h>
@@ -32,6 +32,8 @@ namespace bx
 		struct timespec now;
 		clock_gettime(CLOCK_MONOTONIC, &now);
 		int64_t i64 = now.tv_sec*INT64_C(1000000000) + now.tv_nsec;
+#elif BX_PLATFORM_IOS
+        int64_t i64 = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
 #elif BX_PLATFORM_EMSCRIPTEN
 		int64_t i64 = int64_t(1000.0f * emscripten_get_now() );
 #elif !BX_PLATFORM_NONE
@@ -53,7 +55,7 @@ namespace bx
 		LARGE_INTEGER li;
 		QueryPerformanceFrequency(&li);
 		return li.QuadPart;
-#elif BX_PLATFORM_ANDROID
+#elif BX_PLATFORM_ANDROID || BX_PLATFORM_IOS
 		return INT64_C(1000000000);
 #elif BX_PLATFORM_EMSCRIPTEN
 		return INT64_C(1000000);
