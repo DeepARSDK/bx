@@ -492,6 +492,15 @@ namespace bx
 		_dst[3] = 1.0f;
 	}
 
+    // RGB16
+    inline void packRgb16(void* _dst, const float* _src)
+    {
+        uint16_t* dst = (uint16_t*)_dst;
+        dst[0] = uint16_t(toUnorm(_src[0], 65535.0f) );
+        dst[1] = uint16_t(toUnorm(_src[1], 65535.0f) );
+        dst[2] = uint16_t(toUnorm(_src[2], 65535.0f) );
+    }
+
 	// RGBA16
 	inline void packRgba16(void* _dst, const float* _src)
 	{
@@ -501,6 +510,14 @@ namespace bx
 		dst[2] = uint16_t(toUnorm(_src[2], 65535.0f) );
 		dst[3] = uint16_t(toUnorm(_src[3], 65535.0f) );
 	}
+
+    inline void unpackRgb16(float* _dst, const void* _src)
+    {
+        const uint16_t* src = (const uint16_t*)_src;
+        _dst[0] = fromUnorm(src[0], 65535.0f);
+        _dst[1] = fromUnorm(src[1], 65535.0f);
+        _dst[2] = fromUnorm(src[2], 65535.0f);
+    }
 
 	inline void unpackRgba16(float* _dst, const void* _src)
 	{
